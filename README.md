@@ -47,7 +47,7 @@ runEQ5DApp()
 
 ------------------------------------------------------------------------
 
-## Features {#features}
+## Features
 
 ### 🔍 Interactive Profiles View
 - Explore response distributions across all five EQ-5D dimensions  
