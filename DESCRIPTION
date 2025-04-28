@@ -1,0 +1,38 @@
+Package: Shiny.EQ5D
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Jane", "Doe",
+      email = "jane@example.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: More about what it does (maybe more than one line).
+    Continuation lines should be indented.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
+Imports:
+    shiny
+Suggests:
+    shinythemes,
+    shinyWidgets,
+    DT,
+    dplyr,
+    tidyr,
+    ggplot2,
+    ggpp,
+    ggrain,
+    ggsci,
+    ggthemes,
+    hrbrthemes,
+    RColorBrewer,
+    readr,
+    readxl,
+    scales,
+    viridis,
+    colourpicker,
+    haven
