@@ -17,13 +17,13 @@ An R package wrapping a Shiny application for interactive EQ-5D data visualizati
 
 ------------------------------------------------------------------------
 
-## Description {#description}
+## Description 
 
 **Shiny.EQ5D** provides an easy-to-install R package that launches a  Shiny app for exploring and visualizing EQ-5D descriptive system and VAS (Visual Analogue Scale) data. Whether you’re working with built-in simulated data or your own clinical/research dataset, the app offers flexible plotting options, language toggles (English/Norwegian), and publication-quality downloadable figures.
 
 ------------------------------------------------------------------------
 
-## Installation {#installation}
+## Installation 
 
 Install the development version directly from GitHub:
 
@@ -34,7 +34,7 @@ devtools::install_github("SondreNilsen/Shiny.EQ5D")
 
 ------------------------------------------------------------------------
 
-## Usage {#usage}
+## Usage 
 
 Once installed, load the package and run the app with:
 
@@ -45,7 +45,7 @@ runEQ5DApp()
 
 ------------------------------------------------------------------------
 
-## Features {#features}
+## Features 
 
 -   **Data Source**
     -   Simulated EQ-5D data bundled with the package
@@ -64,7 +64,7 @@ runEQ5DApp()
 
 ------------------------------------------------------------------------
   
-## Citation {#citation}
+## Citation 
 
 If you use **Shiny.EQ5D**, please cite it as:
 
@@ -86,13 +86,13 @@ If you use **Shiny.EQ5D**, please cite it as:
 
 ------------------------------------------------------------------------
 
-## Dependencies {#dependencies}
+## Dependencies
 
 The package imports these core R packages: shiny, shinythemes, shinyWidgets, ggplot2, ggpp, hrbrthemes, ggthemes, ggsci, RColorBrewer, viridis, dplyr, tidyr, scales, DT, colourpicker, haven, readxl, readr, ggrain
 
 ------------------------------------------------------------------------
 
-## Development {#development}
+## Development
 
 To contribute or customize:
 
@@ -109,7 +109,7 @@ git clone git@github.com:SondreNilsen/Shiny.EQ5D.git
 
 ------------------------------------------------------------------------
 
-## License {#license}
+## License
 
 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
