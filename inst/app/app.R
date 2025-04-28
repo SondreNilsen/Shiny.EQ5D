@@ -8,10 +8,6 @@ packages <- c("shiny", "shinythemes", "shinyWidgets", "ggplot2", "dplyr", "tidyr
               "hrbrthemes", "ggpp", "scales", "viridis", "ggthemes",
               "RColorBrewer", "ggsci", "haven", "readxl", "readr", "DT", "ggrain")
 
-# Install any packages that are not already installed
-new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
 # Load all the packages
 lapply(packages, require, character.only = TRUE)
 
