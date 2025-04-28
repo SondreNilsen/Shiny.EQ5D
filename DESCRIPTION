@@ -1,38 +1,41 @@
 Package: Shiny.EQ5D
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Interactive EQ-5D Data Visualizer
 Version: 0.1.0
-Authors@R: c(
+Authors@R: 
+  c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Sondre", "Aasen Nilsen",
+      email = "sondre.aa.nilsen@gmail.com",
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
+Description: Provides an interactive Shiny application for exploring and visualizing EQ-5D health survey data.
+    Launch the app with built-in simulated datasets or upload your own data to generate dynamic
+    profiles across five EQ-5D dimensions and EQ VAS trends. Customization options include theme,
+    color palettes, faceting, and download of publication-quality figures.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Imports:
-    shiny
+  shiny
 Suggests:
-    shinythemes,
-    shinyWidgets,
-    DT,
-    dplyr,
-    tidyr,
-    ggplot2,
-    ggpp,
-    ggrain,
-    ggsci,
-    ggthemes,
-    hrbrthemes,
-    RColorBrewer,
-    readr,
-    readxl,
-    scales,
-    viridis,
-    colourpicker,
-    haven
+  shinythemes,
+  shinyWidgets,
+  DT,
+  dplyr,
+  tidyr,
+  ggplot2,
+  ggpp,
+  ggrain,
+  ggsci,
+  ggthemes,
+  hrbrthemes,
+  RColorBrewer,
+  readr,
+  readxl,
+  scales,
+  viridis,
+  colourpicker,
+  haven
