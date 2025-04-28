@@ -14,7 +14,7 @@ An R package wrapping a Shiny application for interactive EQ-5D data visualizati
 -   [Features](#features)
 -   [Citation](#citation)
 -   [Dependencies](#dependencies)
--   [Development](#development)
+-   [Issues & Feature Requests](#issues--feature-requests)
 -   [License](#license)
 
 ------------------------------------------------------------------------
@@ -47,22 +47,36 @@ runEQ5DApp()
 
 ------------------------------------------------------------------------
 
-## Features 
+## Features {#features}
 
--   **Data Source**
-    -   Simulated EQ-5D data bundled with the package
-    -   Upload your own SPSS (.sav), Stata (.dta), Excel (.xls/.xlsx) or CSV files
--   **EQ-5D Profiles**
-    -   Bar charts, density curves, stacked bar plots per EQ-5D dimension
-    -   Compare groups, show percentages, toggle coordinate flips
--   **EQ VAS**
-    -   Histograms, density plots, raincloud, boxplots, violin, trend lines
-    -   Faceting, reference lines (mean/median), and custom appearance controls
--   **Language Support**
-    -   English and Norwegian labels for facets and response levels
--   **Downloadable Figures**
-    -   PDF or high-resolution PNG export with custom dimensions and DPI
-    
+### 🔍 Interactive Profiles View
+- Explore response distributions across all five EQ-5D dimensions  
+  (Mobility, Self-Care, Usual Activities, Pain/Discomfort, Anxiety/Depression)  
+- Choose between bar, density, or stacked-bar charts  
+- Facet by dimension and include per-facet sample sizes in strip labels  
+
+### 📊 EQ VAS View
+Visualize overall health ratings (0–100) with:  
+- Histogram  
+- Density plot  
+- Raincloud plot  
+- Boxplot  
+- Violin plot  
+- Trend-line (observed, lm, loess)  
+- Add reference lines (mean/median) globally or by group  
+- Facet by any categorical variable with customizable scales  
+
+### 🎨 Theming & Localization
+- Select from multiple ggplot2 themes and color palettes (qualitative & sequential)  
+- Toggle facet labels and response levels between English and Norwegian  
+
+### 📂 Data Upload & Preview
+- Import your own data in SPSS (.sav), Stata (.dta), Excel (.xls/.xlsx), or CSV formats  
+- Automatic wide-to-long conversion and factor labeling  
+
+### 📥 Download Publication-Quality Figures
+- One-click export to PDF or PNG at custom dimensions and resolution  
+
 
 ------------------------------------------------------------------------
   
@@ -94,20 +108,13 @@ The package imports these core R packages: shiny, shinythemes, shinyWidgets, ggp
 
 ------------------------------------------------------------------------
 
-## Development
+## Issues & Feature Requests
 
-To contribute or customize:
+If you encounter a bug or would like to request a new feature, please open an issue on GitHub:
 
-1.  Fork the repository on GitHub.
-2.  Clone locally:
-
-``` bash
-git clone git@github.com:SondreNilsen/Shiny.EQ5D.git
-```
-
-3.  Open the RStudio project, install dependencies, and edit.
-4.  Document changes with roxygen2 and run `devtools::check()` before committing.
-5.  Submit a pull request!
+1. Go to the [Issues tab of this repository](https://github.com/SondreNilsen/Shiny.EQ5D/issues).  
+2. Click **New issue**.  
+3. Choose “Bug report” or “Feature request,” fill in the template, and submit.
 
 ------------------------------------------------------------------------
 
