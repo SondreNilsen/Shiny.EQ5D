@@ -10,8 +10,8 @@ An R package wrapping a Shiny application for interactive EQ-5D data visualizati
 -   [Installation](#installation)
 -   [Usage](#usage)
 -   [Features](#features)
--   [Dependencies](#dependencies)
 -   [Citation](#citation)
+-   [Dependencies](#dependencies)
 -   [Development](#development)
 -   [License](#license)
 
