@@ -30,8 +30,8 @@ An R package wrapping a Shiny application for interactive EQ-5D data visualizati
 Install the development version directly from GitHub:
 
 ``` r
-install.packages("devtools")
-devtools::install_github("SondreNilsen/Shiny.EQ5D")
+install.packages("remotes")
+remotes::install_github("SondreNilsen/Shiny.EQ5D")
 ```
 
 ------------------------------------------------------------------------
