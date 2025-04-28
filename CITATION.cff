@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Shiny.EQ5D: Interactive EQ-5D Data Visualizer"
+version: v0.1.0
+date-released: 2025-04-28
+doi: "10.5281/zenodo.15296116"
+authors:
+  - family-names: "Nilsen"
+    given-names: "Sondre Aasen"
+    orcid: "https://orcid.org/0000-0002-3179-1277"
