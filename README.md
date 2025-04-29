@@ -11,6 +11,7 @@ An R package wrapping a Shiny application for interactive EQ-5D data visualizati
 -   [Description](#description)
 -   [Installation](#installation)
 -   [Usage](#usage)
+-   [Web Application](web--application)
 -   [Features](#features)
 -   [Citation](#citation)
 -   [Dependencies](#dependencies)
@@ -55,7 +56,6 @@ You can also access and run the full Shiny.EQ5D application online (no data is e
 
 > **Note:** All uploads in this hosted session are ephemeral—nothing is saved on the server.  
 > For sensitive data or full control over your files, see [Usage](#usage) to install and run the app locally.
-
 
 ------------------------------------------------------------------------
 
