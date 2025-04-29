@@ -1,6 +1,7 @@
 # Shiny.EQ5D
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15296115.svg)](https://doi.org/10.5281/zenodo.15296115)
+[![R-CMD-check](https://github.com/SondreNilsen/Shiny.EQ5D/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SondreNilsen/Shiny.EQ5D/actions/workflows/R-CMD-check.yaml)
 
 An R package wrapping a Shiny application for interactive EQ-5D data visualization.
 
