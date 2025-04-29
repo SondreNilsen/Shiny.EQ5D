@@ -1,6 +1,6 @@
 # Shiny.EQ5D
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15296116.svg)](https://doi.org/10.5281/zenodo.15296116)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15296115.svg)](https://doi.org/10.5281/zenodo.15296115)
 
 An R package wrapping a Shiny application for interactive EQ-5D data visualization.
 
@@ -91,24 +91,24 @@ Visualize overall health ratings (0–100) with:
 
 
 ------------------------------------------------------------------------
-  
-## Citation 
 
-If you use **Shiny.EQ5D**, please cite it as:
+## Citation
 
-> Nilsen, S. A. (2025). *Shiny.EQ5D: Interactive EQ-5D Data Visualizer* (Version 0.1.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.15296116
+If you use **Shiny.EQ5D** in your work, please cite it as:
+
+> Nilsen, S. A. (2025). _Shiny.EQ5D: Interactive EQ-5D Data Visualizer_ (Version 0.1.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.15296115
 
 ### BibTeX
 
 ```bibtex
-@software{Nilsen2025ShinyEQ5D,
-  author       = {Nilsen, Sondre Aasen},
-  title        = {{Shiny.EQ5D: Interactive EQ-5D Data Visualizer}},
-  version      = {0.1.0},
-  year         = {2025},
-  publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.15296116},
-  url          = {https://doi.org/10.5281/zenodo.15296116}
+@Software{Nilsen2025ShinyEQ5D,
+  author    = {Nilsen, Sondre Aasen},
+  title     = {{Shiny.EQ5D: Interactive EQ-5D Data Visualizer}},
+  version   = {0.1.0},
+  year      = {2025},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.15296115},
+  url       = {https://github.com/SondreNilsen/Shiny.EQ5D}
 }
 ```
 
