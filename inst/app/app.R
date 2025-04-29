@@ -1,19 +1,25 @@
 # ====================================
 # Load required libraries
 # ====================================
-
-# ===== Package Loading =====
-# List of required packages
-packages <- c("shiny", "shinythemes", "shinyWidgets", "ggplot2", "dplyr", "tidyr", "colourpicker",
-              "hrbrthemes", "ggpp", "scales", "viridis", "ggthemes",
-              "RColorBrewer", "ggsci", "haven", "readxl", "readr", "DT", "ggrain")
-
-# Install any packages that are not already installed
-new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
-# Load all the packages
-lapply(packages, require, character.only = TRUE)
+library(shiny)
+library(shinythemes)
+library(shinyWidgets)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(colourpicker)
+library(hrbrthemes)
+library(ggpp)
+library(scales)
+library(viridis)
+library(ggthemes)
+library(RColorBrewer)
+library(ggsci)
+library(haven)
+library(readxl)
+library(readr)
+library(DT)
+library(ggrain)
 
 # ------------------------------------
 # Theme and Palette Functions (common)
