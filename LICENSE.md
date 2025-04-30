@@ -1,8 +1,3 @@
-Year: 2025
-Copyright: Sondre Aasen Nilsen
-
-MIT License
-
 Copyright (c) 2025 Sondre Aasen Nilsen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

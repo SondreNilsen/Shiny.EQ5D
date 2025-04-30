@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^LICENSE\.md$
 ^CITATION\.cff$
+^LICENSE\.md$
 ^app\.R$
 ^\.github$
