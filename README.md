@@ -132,17 +132,18 @@ Visualize overall health ratings (0–100) with:
     <strong>EQ-5D Profiles</strong><br/>
     <img src="man/figures/Screenshot_dimensions_stacked.png"
          alt="EQ-5D Profiles"
-         width="45%" />
+         width="75%" />
   </td>
   <td align="center">
     <strong>EQ VAS</strong><br/>
     <img src="man/figures/Screenshot_eqvas_density.png"
          alt="EQ VAS"
-         width="45%" />
+         width="75%" />
   </td>
 </tr>
 </table>
 ------------------------------------------------------------------------
+
 ## Citation
 
 If you use **Shiny.EQ5D** in your work, please cite it as:
