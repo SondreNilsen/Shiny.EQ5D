@@ -126,18 +126,11 @@ Visualize overall health ratings (0–100) with:
 
 ## Screenshots
 
-<table>
-<tr>
-  <td align="center">
-    **EQ-5D Profiles (Stacked Bar Chart)**<br/>
-    [![](man/figures/Screenshot_dimensions_stacked.png)](man/figures/Screenshot_dimensions_stacked.png)
-  </td>
-  <td align="center">
-    **EQ VAS (Density Plot)**<br/>
-    [![](man/figures/Screenshot_eqvas_density.png)](man/figures/Screenshot_eqvas_density.png)
-  </td>
-</tr>
-</table>
+**EQ-5D Profiles (Stacked Bar Chart)**  
+[![EQ-5D Profiles](man/figures/Screenshot_dimensions_stacked.png)](man/figures/Screenshot_dimensions_stacked.png)
+
+**EQ VAS (Density Plot)**  
+[![EQ VAS](man/figures/Screenshot_eqvas_density.png)](man/figures/Screenshot_eqvas_density.png)
 
 ------------------------------------------------------------------------
 ## Citation
