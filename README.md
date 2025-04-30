@@ -126,6 +126,9 @@ Visualize overall health ratings (0–100) with:
 
 ## Screenshots
 
+- See a few example screenshots in the [`man/figures/`](man/figures/) folder.
+
+
 <table>
 <tr>
   <td align="center">
@@ -142,6 +145,7 @@ Visualize overall health ratings (0–100) with:
   </td>
 </tr>
 </table>
+
 ------------------------------------------------------------------------
 
 ## Citation
