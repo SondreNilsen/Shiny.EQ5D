@@ -3,6 +3,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15296115.svg)](https://doi.org/10.5281/zenodo.15296115)
 [![R-CMD-check](https://github.com/SondreNilsen/Shiny.EQ5D/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SondreNilsen/Shiny.EQ5D/actions/workflows/R-CMD-check.yaml)
 ![Offline Install](https://img.shields.io/badge/offline--install-ready-brightgreen)
+![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey)
 ![Shiny App](https://img.shields.io/badge/Shiny_App-EQ--5D-blue)
 
 An R package wrapping a Shiny application for interactive EQ-5D data visualization.
@@ -190,6 +191,9 @@ If you encounter a bug or would like to request a new feature, please open an is
 
 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
+ > We welcome free use, modification, and contributions.  
+ > If you’d like to incorporate this software into a commercial product or service, please [get in touch](mailto:sondre.aa.nilsen@gmail.com).
+
 ------------------------------------------------------------------------
 
-*Created by Sondre Aasen Nilsen, Center for Patient-Reported Data, Haukeland University Hospital*
+*Created by Sondre Aasen Nilsen, on behalf of the Center for Patient-Reported Data, Haukeland University Hospital*
