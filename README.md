@@ -158,15 +158,21 @@ If you use **Shiny.EQ5D** in your work, please cite it as:
 ### BibTeX
 
 ``` bibtex
-@Software{Nilsen2025ShinyEQ5D,
+@Manual{Nilsen2025ShinyEQ5D,
+  title     = {Shiny.EQ5D: Interactive EQ-5D Data Visualizer},
   author    = {Nilsen, Sondre Aasen},
-  title     = {{Shiny.EQ5D: Interactive EQ-5D Data Visualizer}},
-  version   = {0.1.0},
   year      = {2025},
-  publisher = {Zenodo},
+  version   = {0.1.0},
   doi       = {10.5281/zenodo.15296115},
-  url       = {https://github.com/SondreNilsen/Shiny.EQ5D}
+  url       = {https://github.com/SondreNilsen/Shiny.EQ5D},
+  note      = {Zenodo. https://doi.org/10.5281/zenodo.15296115}
 }
+```
+
+You can also get this citation straight from R:
+
+```r
+citation("Shiny.EQ5D")
 ```
 
 ------------------------------------------------------------------------
