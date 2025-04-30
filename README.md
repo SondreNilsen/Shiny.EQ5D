@@ -14,8 +14,9 @@ An R package wrapping a Shiny application for interactive EQ-5D data visualizati
 -   [Description](#description)
 -   [Installation](#installation)
 -   [Usage](#usage)
--   [Web Application](web--application)
+-   [Web Application](#web--application)
 -   [Features](#features)
+-   [Screenshots](#screenshots)
 -   [Citation](#citation)
 -   [Dependencies](#dependencies)
 -   [Issues & Feature Requests](#issues--feature-requests)
@@ -123,6 +124,30 @@ Visualize overall health ratings (0–100) with:
 
 ------------------------------------------------------------------------
 
+## Screenshots
+
+<table>
+<tr>
+  <td align="center">
+    <strong>EQ-5D Profiles (Stacked Bar Chart)</strong><br/>
+    <img
+      src="man/figures/Screenshot_dimensions_stacked.png"
+      alt="EQ-5D Profiles Stacked Bar Chart"
+      width="45%"
+    />
+  </td>
+  <td align="center">
+    <strong>EQ VAS (Density Plot)</strong><br/>
+    <img
+      src="man/figures/Screenshot_eqvas_density.png"
+      alt="EQ VAS Density Plot Faceted by Age and Grouped by Education"
+      width="45%"
+    />
+  </td>
+</tr>
+</table>
+
+------------------------------------------------------------------------
 ## Citation
 
 If you use **Shiny.EQ5D** in your work, please cite it as:
