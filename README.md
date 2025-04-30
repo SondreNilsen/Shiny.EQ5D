@@ -23,13 +23,13 @@ An R package wrapping a Shiny application for interactive EQ-5D data visualizati
 
 ------------------------------------------------------------------------
 
-## Description {#description}
+## Description
 
 **Shiny.EQ5D** provides an easy-to-install R package that launches a Shiny app for exploring and visualizing EQ-5D descriptive system and VAS (Visual Analogue Scale) data. Whether you’re working with built-in simulated data or your own clinical/research dataset, the app offers flexible plotting options, language toggles (English/Norwegian), and publication-quality downloadable figures.
 
 ------------------------------------------------------------------------
 
-## Installation {#installation}
+## Installation
 
 Install the development version directly from GitHub:
 
@@ -64,7 +64,7 @@ install.packages("/path/to/Shiny.EQ5D_0.1.0.tar.gz", repos = NULL, type = "sourc
 
 ------------------------------------------------------------------------
 
-## Usage {#usage}
+## Usage
 
 Once installed, load the package and run the app with:
 
@@ -86,7 +86,7 @@ You can also access and run the full Shiny.EQ5D application online (no data is e
 
 ------------------------------------------------------------------------
 
-## Features {#features}
+## Features
 
 ### 🔍 Interactive Profiles View
 
@@ -123,7 +123,7 @@ Visualize overall health ratings (0–100) with:\
 
 ------------------------------------------------------------------------
 
-## Citation {#citation}
+## Citation
 
 If you use **Shiny.EQ5D** in your work, please cite it as:
 
@@ -145,7 +145,7 @@ If you use **Shiny.EQ5D** in your work, please cite it as:
 
 ------------------------------------------------------------------------
 
-## Dependencies {#dependencies}
+## Dependencies
 
 The package imports these core R packages: shiny, shinythemes, shinyWidgets, ggplot2, ggpp, hrbrthemes, ggthemes, ggsci, RColorBrewer, viridis, dplyr, tidyr, scales, DT, colourpicker, haven, readxl, readr, ggrain
 
@@ -161,7 +161,7 @@ If you encounter a bug or would like to request a new feature, please open an is
 
 ------------------------------------------------------------------------
 
-## License {#license}
+## License
 
 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
