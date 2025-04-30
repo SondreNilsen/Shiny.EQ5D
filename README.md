@@ -90,26 +90,26 @@ You can also access and run the full Shiny.EQ5D application online (no data is e
 
 ### 🔍 Interactive Profiles View
 
--   Explore response distributions across all five EQ-5D dimensions\
-    (Mobility, Self-Care, Usual Activities, Pain/Discomfort, Anxiety/Depression)\
--   Choose between bar, density, or stacked-bar charts\
+-   Explore response distributions across all five EQ-5D dimensions
+    (Mobility, Self-Care, Usual Activities, Pain/Discomfort, Anxiety/Depression)
+-   Choose between bar, density, or stacked-bar charts
 -   Facet by dimension and include per-facet sample sizes in strip labels
 
 ### 📊 EQ VAS View
 
-Visualize overall health ratings (0–100) with:\
-- Histogram\
-- Density plot\
-- Raincloud plot\
-- Boxplot\
-- Violin plot\
-- Trend-line (observed, lm, loess)\
-- Add reference lines (mean/median) globally or by group\
+Visualize overall health ratings (0–100) with:
+- Histogram
+- Density plot
+- Raincloud plot
+- Boxplot
+- Violin plot
+- Trend-line (observed, lm, loess)
+- Add reference lines (mean/median) globally or by group
 - Facet by any categorical variable with customizable scales
 
 ### 🎨 Theming & Localization
 
--   Select from multiple ggplot2 themes and color palettes (qualitative & sequential)\
+-   Select from multiple ggplot2 themes and color palettes (qualitative & sequential)
 -   Toggle facet labels and response levels between English and Norwegian
 
 ### 📂 Data Upload & Preview
@@ -155,9 +155,9 @@ The package imports these core R packages: shiny, shinythemes, shinyWidgets, ggp
 
 If you encounter a bug or would like to request a new feature, please open an issue on GitHub:
 
-1.  Go to the [Issues tab of this repository](https://github.com/SondreNilsen/Shiny.EQ5D/issues).\
-2.  Click **New issue**.\
-3.  Choose “Bug report” or “Feature request,” fill in the template, and submit.
+1.  Go to the [Issues tab of this repository](https://github.com/SondreNilsen/Shiny.EQ5D/issues)
+2.  Click **New issue**
+3.  Choose “Bug report” or “Feature request,” fill in the template, and submit
 
 ------------------------------------------------------------------------
 
