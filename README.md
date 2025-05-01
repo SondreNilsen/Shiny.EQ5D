@@ -21,6 +21,7 @@ An R package wrapping a Shiny application for interactive EQ-5D data visualizati
 -   [Citation](#citation)
 -   [Dependencies](#dependencies)
 -   [Issues & Feature Requests](#issues--feature-requests)
+-   [Standalone R Script](#standalone-r-script)
 -   [License](#license)
 
 ------------------------------------------------------------------------
@@ -192,6 +193,21 @@ If you encounter a bug or would like to request a new feature, please open an is
 3.  Choose “Bug report” or “Feature request,” fill in the template, and submit
 
 ------------------------------------------------------------------------
+
+
+## Standalone R Script
+
+If you prefer working directly in R, you can use a standalone script to create many of the same plots available in the Shiny app.
+
+📄 **Download the script:**  
+[`EQ5D_script.R`](https://github.com/SondreNilsen/Shiny.EQ5D/blob/main/extras/EQ5D_script.R)
+
+📖 **View the interactive user manual:**  
+[EQ5D_manual_script.html](https://sondrenilsen.github.io/Shiny.EQ5D/EQ5D_manual_script.html)
+
+
+------------------------------------------------------------------------
+
 
 ## License
 

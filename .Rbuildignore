@@ -3,6 +3,6 @@
 ^CITATION\.cff$
 ^LICENSE\.md$
 ^docs$
-^user_manual$
+^extras$
 ^app\.R$
 ^\.github$
