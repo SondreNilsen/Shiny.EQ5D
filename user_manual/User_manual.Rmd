@@ -1,0 +1,806 @@
+---
+title: "EQ5D Datavisualizations"
+author: "Sondre Nilsen"
+date: "2025-03-24"
+output:
+  rmdformats::material:
+    cards: T
+    code_folding: hide
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Overview
+
+This document demonstrates how to create various visualizations of the EQ5D instrument using **`ggplot2`** in R.  
+It also serves as a `user manual` for an accompanying clean R script that you can download separately.
+
+Each section includes an explanation followed by the corresponding code.  
+Click the **Code** button in the bottom right corner to display the code for each step/plot we are making.
+
+# 1. Setup
+
+## Installing and Loading Packages
+
+Before we start, we need to install and load the required packages to run the script.  
+The code below creates a list of the names of all packages we need.  
+The next part checks if you have these packages installed, and if not, installs them—before they are loaded into R.
+
+```{r setup, message=FALSE, warning=FALSE}
+# List of required packages
+packages <- c(
+  "ggplot2","dplyr","tidyr","forcats","scales",
+  "viridis","RColorBrewer","ggsci","ggridges","ggdist"
+)
+
+# Install any packages that are not already installed
+new.packages <- packages[!(packages %in% installed.packages()[, "Package"])]
+if (length(new.packages)) install.packages(new.packages)
+
+# Load all the packages without printing the output
+invisible(lapply(packages, library, character.only = TRUE))
+```
+
+## Defining a Custom Theme
+
+The default theme of ggplot has a gray background designed to make graphical elements “pop” out.
+For a cleaner look, we define our own custom theme that we will use for all figures.
+By defining theme_nice(), we can use this function in all our plots by adding + theme_nice(), saving time and ensuring consistency.
+
+
+```{r}
+# Define a custom theme function based on theme_bw()
+theme_nice <- function(base_size = 10) {
+  theme_bw(base_size = base_size) +
+    theme(
+      panel.grid       = element_blank(),
+      strip.background = element_blank(),
+      strip.text       = element_text(size = base_size)
+    )
+}
+  
+
+```
+
+
+## Defining Dimension and Response Level Labels
+
+To easily add dimension and response level labels/names to our plots, we create vectors of dimension labels and response level labels.
+Below we specify both English and Norwegian versions, so you can switch between them as needed.
+
+
+```{r}
+# Dimension labels (English & Norwegian)
+eq5d_dim_eng <- c(
+  MO = "Mobility (MO)", 
+  SC = "Self-Care (SC)", 
+  UA = "Usual Activities (UA)",
+  PD = "Pain/Discomfort (PD)", 
+  AD = "Anxiety/Depression (AD)"
+)
+
+eq5d_dim_nor <- c(
+  MO = "Mobilitet (MO)", 
+  SC = "Egenomsorg (SC)", 
+  UA = "Vanlige aktiviteter (UA)",
+  PD = "Smerte/ubehag (PD)", 
+  AD = "Angst/Depresjon (AD)"
+)
+
+# Response level labels
+eq5d_levels     <- c("1","2","3","4","5")
+eq5d_labels_eng <- c(
+  "No problem","Slight problem","Moderate problems",
+  "Severe problems","Extreme problems"
+)
+eq5d_labels_nor <- c(
+  "Ingen problemer","Litt problemer","Moderat problemer",
+  "Alvorlige problemer","Ekstreme problemer"
+)
+
+
+```
+
+
+# 2. Loading Your Own Data (Optional)
+
+If you have your own EQ-5D dataset, you can use the code below to load it here.
+Your data should be in standard wide format—each EQ-5D dimension must be stored as its own variable (column).
+Each dimension should be numeric, with levels ranging from 1 = No problems to 5 = Extreme problems.
+The EQ_VAS variable should be numeric, with a theoretical range from 0–100.
+
+| **Variable Name** | **Full Domain Name**          |
+|-------------------|-------------------------------|
+| `MO`              | Mobility                      |
+| `SC`              | Self-Care                     |
+| `UA`              | Usual Activities              |
+| `PD`              | Pain/Discomfort               |
+| `AD`              | Anxiety/Depression            |
+| `EQ_VAS`          | Visual Analogue Scale (0-100) |
+
+
+Below are commented code examples for loading data from different file formats.
+Uncomment the relevant lines and modify the file path as needed.
+
+```{r}
+# For SPSS (.sav):
+# library(haven)
+# df <- read_sav("your_data.sav") %>%
+#         mutate(across(where(is.labelled), as_factor))
+
+# For Stata (.dta):
+# library(haven)
+# df <- read_dta("your_data.dta")
+
+# For Excel (.xls/.xlsx):
+# library(readxl)
+# df <- read_excel("your_data.xlsx")
+
+# For CSV (.csv):
+# library(readr)
+# df <- read_csv("your_data.csv")
+
+```
+
+# 3. Data Simulation (skip if using own data)
+
+In order to have some data to showcase the various ways to visualize the EQ-5D instrument, we simulate a dataset of 2,000 responses.
+This includes demographic variables, hospital effects, and a sine-wave year effect.
+If you’re using your own data, skip this section.
+
+
+```{r}
+set.seed(123)
+n <- 2000
+
+# Demographics & groups
+gender         <- sample(c("male","female"), n, replace = TRUE)
+age_numeric    <- sample(18:100, n, replace = TRUE)
+age_breaks     <- c(18,30,40,50,60,70,80,90,101)
+age_labels     <- c("18-29","30-39","40-49","50-59","60-69","70-79","80-89","90+")
+age            <- cut(age_numeric, breaks = age_breaks, labels = age_labels, right = FALSE)
+treatment      <- factor(sample(c("pre","post"), n, replace = TRUE),
+                         levels = c("pre","post"), ordered = TRUE)
+marital_status <- factor(sample(c("married","divorced/separated","single","widowed"),
+                                n, replace = TRUE, prob = c(0.5,0.2,0.2,0.1)),
+                         levels = c("married","divorced/separated","single","widowed"),
+                         ordered = TRUE)
+smoking        <- sample(c("yes","no"), n, replace = TRUE, prob = c(0.3,0.7))
+education      <- factor(sample(c("Low","Medium","High"), n, replace = TRUE, prob = c(0.3,0.4,0.3)),
+                         levels = c("Low","Medium","High"), ordered = TRUE)
+income         <- factor(sample(c("Low","Medium","High"), n, replace = TRUE, prob = c(0.3,0.4,0.3)),
+                         levels = c("Low","Medium","High"), ordered = TRUE)
+
+# Hospital effect
+hospital_levels  <- paste0("hospital ", 1:15)
+hospital         <- factor(sample(hospital_levels, n, replace = TRUE),
+                           levels = hospital_levels, ordered = TRUE)
+hospital_offsets <- seq(-25,25,length.out=15) + rnorm(15,0,3)
+names(hospital_offsets) <- hospital_levels
+
+# Simulate EQ-5D dimensions (1–5)
+simulate_dim <- function(mean_target, smoker, age, education) {
+  b <- round(rnorm(1, mean = mean_target, sd = 1))
+  b <- b + ifelse(smoker=="yes", 2, 0)
+  b <- b + ifelse(age %in% c("60-69","70-79","80-89","90+"), 1,
+                  ifelse(age %in% c("18-29","30-39"), -1, 0))
+  b <- b + ifelse(education=="Low", 1, ifelse(education=="High", -1, 0))
+  round(min(max(b, 1), 5))
+}
+MO <- mapply(simulate_dim, 2.5, smoking, age, education)
+SC <- mapply(simulate_dim, 2.8, smoking, age, education)
+UA <- mapply(simulate_dim, 3.1, smoking, age, education)
+PD <- mapply(simulate_dim, 3.4, smoking, age, education)
+AD <- mapply(simulate_dim, 3.8, smoking, age, education)
+
+# Simulate EQ VAS (0–100)
+simulate_vas <- function(baseline, gender, income, education,
+                         marital_status, treatment, smoker, age, hospital) {
+  b <- qnorm(runif(1, pnorm(-1.2), pnorm(1.2))) * 8 + baseline
+  b <- b + ifelse(gender=="male", 3, -3)
+  b <- pmin(pmax(b, 0), 100)
+  b <- b + ifelse(income=="Low",-15, ifelse(income=="High",15,0))
+  b <- b + ifelse(education=="Low",-10, ifelse(education=="High",7,0))
+  b <- b + ifelse(marital_status=="married",8,
+                  ifelse(marital_status=="divorced/separated",-7,
+                         ifelse(marital_status=="widowed",-10,0)))
+  b <- b + ifelse(treatment=="post",10,0)
+  b <- b + ifelse(smoker=="yes",-10,0)
+  b <- b - ifelse(age %in% c("60-69","70-79","80-89","90+"), 8, 0)
+  b <- b + hospital_offsets[as.character(hospital)]
+  round(min(max(b, 0),100))
+}
+EQ_VAS <- mapply(simulate_vas, baseline = 60,
+                 gender, income, education, marital_status,
+                 treatment, smoking, age, hospital)
+
+# Assemble and add year + sine-wave effect
+df <- data.frame(
+  MO, SC, UA, PD, AD,
+  gender, age, EQ_VAS, treatment,
+  marital_status, smoking, education, income,
+  hospital
+) %>%
+  mutate(
+    year = rep(2018:2025, each = n()/8),
+    EQ_VAS = round(pmin(100, pmax(0,
+                      EQ_VAS + sin(2*pi*(year-2018)/7)*10)))
+  )
+
+```
+
+# 4. Data Preparation
+
+Here, we convert our dataset from a wide format (where each EQ-5D dimension is in its own column) to a long format.
+This transformation makes it easier to create faceted plots in ggplot2.
+
+Below you will see how the data looks before and after pivoting:
+
+```{r}
+df_long <- df %>%
+  pivot_longer(
+    cols      = c(MO,SC,UA,PD,AD),
+    names_to  = "Dimension",
+    values_to = "Response"
+  )
+
+# View data before pivot
+head(df)
+
+# View data after pivot
+head(df_long)
+
+```
+
+
+
+# 5. EQ5D Dimension Profiles
+
+Having followed the steps above, we are now ready to create data visualizations.
+We will start by plotting the EQ-5D dimensions to investigate distributions of responses across:
+
+- Mobility
+- Self-Care
+- Usual Activities
+- Pain/Discomfort
+- Anxiety/Depression
+
+Most of the plots we will create are facet plots, meaning each figure is subdivided into panels—one per dimension—so we can easily compare response patterns.
+
+## Bar Charts of EQ5D Dimensions
+
+This section presents bar charts that visualize the proportion of respondents selecting each category.
+
+## Faceted Bar Chart for All Dimensions
+
+How this works: 
+
+- The x-axis labels use `eq5d_labels_eng`, and the facets are labeled via `eq5d_dim_eng.`
+- To switch to Norwegian, change to `eq5d_labels_nor` and `eq5d_dim_nor.`
+- In order to create the bar chart, we need to calculate number of observations for each level within each dimension. 
+- `group_by(Dimension, Response`) and `summarise(count = n())` tally the number of observations in each response category for each dimension.
+- `group_by(Dimension)` + `mutate(proportion = count / sum(count))` converts counts into proportions, so that within each facet the bars sum to 1 (i.e., 100%).
+- We ungroup before plotting because the summary columns are now fixed, and geom_bar(stat="identity") uses our precomputed proportion for bar heights.
+- `scale_x_discrete()` is used to split the x variable labels, to avoid overplotting
+
+```{r, fig.width=16, fig.height=8}
+df_bar <- df_long %>%
+  group_by(Dimension, Response) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(Dimension) %>%
+  mutate(proportion = count / sum(count)) %>%
+  ungroup()
+
+p_bar_all <- ggplot(df_bar,
+                    aes(
+                      x    = factor(Response, levels = eq5d_levels, labels = eq5d_labels_eng),
+                      y    = proportion,
+                      fill = factor(Response, levels = eq5d_levels, labels = eq5d_labels_eng)
+                    )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = paste0(round(proportion*100,1), "%")),
+            vjust = -0.3, size = 3) +
+  facet_wrap(~ Dimension, labeller = labeller(Dimension = eq5d_dim_eng)) +
+  scale_y_continuous(labels = scales::percent_format(), expand = expansion(mult = c(0,0.05))) +
+  scale_fill_brewer(palette = "Blues", name = "", labels = eq5d_labels_eng) +
+  labs(title = "Distribution of EQ-5D responses", x = "", y = "Percent") +
+    scale_x_discrete(
+    labels = function(x) stringr::str_wrap(x, width = 8)
+  ) +
+  theme_nice() +
+  theme(
+    axis.text.x = element_text(size = 10)
+  )
+
+p_bar_all
+# ggsave("bar_all.pdf", p_bar_all, width = 12, height = 6)
+# ggsave("bar_all.png", p_bar_all, width = 12, height = 6, dpi = 1000)
+
+```
+
+
+## Bar Chart with Group Comparison by Gender
+
+To compare distributions across gender, we add gender to the grouping and map it to the fill aesthetic.
+
+How this works:
+
+- Including gender in` group_by() `ensures that proportions are calculated separately for males and females within each dimension.
+- `position = position_dodge()` places bars side-by-side instead of stacking.
+- The mapping `fill = gender` automatically assigns each gender a distinct color from the Chicago palette.
+
+```{r, fig.width=16, fig.height=8}
+df_bar_gender <- df_long %>%
+  group_by(Dimension, Response, gender) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(Dimension, gender) %>%
+  mutate(proportion = count / sum(count)) %>%
+  ungroup()
+
+p_bar_gender <- ggplot(df_bar_gender,
+                       aes(
+                         x    = factor(Response, levels = eq5d_levels, labels = eq5d_labels_eng),
+                         y    = proportion,
+                         fill = gender
+                       )) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_text(aes(label = paste0(round(proportion*100,1), "%")),
+            position = position_dodge(width = 0.9), vjust = -0.3, size = 3) +
+  facet_wrap(~ Dimension, labeller = labeller(Dimension = eq5d_dim_eng)) +
+  scale_fill_uchicago() +
+  labs(title = "EQ-5D responses by gender", x = "", y = "Percent", fill = "Gender") +
+   scale_x_discrete(
+    labels = function(x) stringr::str_wrap(x, width = 8)
+  ) +
+  scale_y_continuous(labels = scales::percent_format(), expand = expansion(mult = c(0,0.05))) +
+  theme_nice() +
+    theme(
+    axis.text.x = element_text(size = 10)
+  )
+
+p_bar_gender
+# ggsave("bar_gender.pdf", p_bar_gender, width = 12, height = 6)
+# ggsave("bar_gender.png", p_bar_gender, width = 12, height = 6, dpi = 1000)
+
+```
+
+
+## Bar Chart for a Single Dimension (Mobility)
+
+How this works:
+
+- We start from `df_bar`, which already contains the precomputed proportion for each (Dimension, Response) pair.
+- `filter(Dimension == "MO")` isolates only the Mobility rows. Adapt to choose the dimension of interest
+- In `aes()`, `x = factor(Response…)` ensures the five response levels are ordered and labeled correctly,` y = proportion` uses our precomputed proportions, and `fill` colors each bar by its response level.
+- `geom_bar(stat = "identity"`) draws bars with heights equal to our proportion values (instead of letting ggplot count the data).
+- `geom_text() `adds the percentage labels just above each bar.
+
+
+```{r, fig.width=12, fig.height=8}
+df_bar_mo <- df_bar %>% filter(Dimension == "MO")
+
+p_bar_mo <- ggplot(df_bar_mo,
+                   aes(
+                     x    = factor(Response, levels = eq5d_levels, labels = eq5d_labels_eng),
+                     y    = proportion,
+                     fill = factor(Response, levels = eq5d_levels, labels = eq5d_labels_eng)
+                   )) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = paste0(round(proportion*100,1), "%")),
+            vjust = -0.3, size = 3) +
+  scale_fill_brewer(palette = "Blues", name = "", labels = eq5d_labels_eng) +
+  labs(title = "Mobility (MO) response distribution", x = "", y = "Percent") +
+  scale_y_continuous(labels = scales::percent_format(), expand = expansion(mult = c(0,0.05))) +
+  theme_nice()
+
+p_bar_mo
+# ggsave("bar_mo.pdf", p_bar_mo, width = 8, height = 5)
+# ggsave("bar_mo.png", p_bar_mo, width = 8, height = 5, dpi = 1000)
+
+```
+
+
+## Bar Chart for Mobility by Gender
+
+How this works: 
+
+- We begin with `df_long`, filter to `Dimension == "MO"`, then `group_by(Response, gender)` to get counts per response per gender.
+- Re-grouping by gender and computing `proportion = count / sum(count`) gives us the share of each response within each gender.
+- In the plot, `fill = gender` assigns a distinct color to each gender, and `position = position_dodge()` places their bars side-by-side.
+- `geom_text()` is also dodged so the percentage labels align correctly above each gender’s bar
+
+```{r, fig.width=12, fig.height=8}
+df_bar_mo_g <- df_long %>%
+  filter(Dimension == "MO") %>%
+  group_by(Response, gender) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(gender) %>%
+  mutate(proportion = count / sum(count)) %>%
+  ungroup()
+
+p_bar_mo_g <- ggplot(df_bar_mo_g,
+                     aes(
+                       x    = factor(Response, levels = eq5d_levels, labels = eq5d_labels_eng),
+                       y    = proportion,
+                       fill = gender
+                     )) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_text(aes(label = paste0(round(proportion*100,1), "%")),
+            position = position_dodge(width = 0.9), vjust = -0.3, size = 3) +
+  scale_fill_uchicago() +
+  labs(title = "MO response distribution by gender", x = "", y = "Percent", fill = "Gender") +
+  scale_y_continuous(labels = scales::percent_format(), expand = expansion(mult = c(0,0.05))) +
+  theme_nice()
+
+p_bar_mo_g
+# ggsave("bar_mo_gender.pdf", p_bar_mo_g, width = 8, height = 5)
+# ggsave("bar_mo_gender.png", p_bar_mo_g, width = 8, height = 5, dpi = 1000)
+
+```
+
+## Stacked Bar Charts
+
+Stacked bar charts are a handy way to visualize the distribution of responses across all five dimensions, and to compare groups at the same time.
+They show the composition of each dimension’s responses as 100% stacks, and can be faceted and/or grouped.
+
+How this works:
+
+- We recode `Response` to a factor with proper labels so the stacks appear in the correct order.
+- `group_by(Dimension, Response) `(and + `smoking` for the grouped version) aggregates counts.
+- `mutate(pct = count / sum(count) * 100)` converts counts into percentages for each Dimension (or Dimension + smoking).
+- With `position = "stack"`, `geom_bar()` layers the categories on top of each other to reach 100%.
+- `facet_wrap(~ Dimension)` splits the plot into panels by dimension.
+  
+
+```{r, fig.width=12, fig.height=8}
+# Prepare data for the stacked bar chart
+df_stack <- df_long %>%
+  mutate(Response = factor(Response, levels = eq5d_levels, labels = eq5d_labels_eng)) %>%
+  group_by(Dimension, Response) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(Dimension) %>%
+  mutate(pct = count / sum(count) * 100) %>%
+  ungroup()
+
+# Create the stacked bar chart
+p_stack_all <- ggplot(df_stack, aes(x = Dimension, y = pct, fill = Response)) +
+  geom_bar(stat = "identity", position = "stack", colour = "white") +
+  geom_text(aes(label = paste0(round(pct,1), "%")),
+            position = position_stack(vjust = 0.5), size = 3) +
+  scale_y_continuous(labels = function(x) paste0(x, "%"),
+                     expand = expansion(mult = c(0,0.02))) +
+  scale_fill_brewer(palette = "Blues", name = "", labels = eq5d_labels_eng) +
+  labs(title = "Stacked EQ-5D Responses (no group)",
+       x = "Dimension",
+       y = "Percent") +
+  theme_nice()
+
+p_stack_all
+# ggsave("stack_all.pdf", p_stack_all, width = 10, height = 6)
+# ggsave("stack_all.png", p_stack_all, width = 10, height = 6, dpi = 1000)
+```
+
+
+## Stacked Bar Chart by Smoking
+Here we break down the stacked bars by smoking status, faceted by dimension.
+
+Only change from previous plot: 
+
+- add `smoking` to the `group_by()` arguments
+- add `smoking` to the `x =` argument
+
+
+```{r, fig.width=14, fig.height=12}
+# Prepare data for the grouped stacked bar chart
+df_stack_smoke <- df_long %>%
+  mutate(Response = factor(Response, levels = eq5d_levels, labels = eq5d_labels_eng)) %>%
+  group_by(Dimension, smoking, Response) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(Dimension, smoking) %>%
+  mutate(pct = count / sum(count) * 100) %>%
+  ungroup()
+
+# Create the facet-wrapped stacked bar chart
+p_stack_smoke <- ggplot(df_stack_smoke, aes(x = smoking, y = pct, fill = Response)) +
+  geom_bar(stat = "identity", position = "stack", colour = "white") +
+  #uncomment to add percentages as text
+  #geom_text(aes(label = paste0(round(pct,1), "%")),
+  #          position = position_stack(vjust = 0.5), size = 3) +
+  facet_wrap(~ Dimension, labeller = labeller(Dimension = eq5d_dim_eng)) +
+  scale_y_continuous(labels = function(x) paste0(x, "%"),
+                     expand = expansion(mult = c(0,0.02))) +
+  scale_fill_brewer(palette = "Blues", name = "", labels = eq5d_labels_eng) +
+  labs(title = "Stacked EQ-5D Responses by Smoking",
+       x = "Smoking Status",
+       y = "Percent") +
+  theme_nice()
+
+p_stack_smoke
+# ggsave("stack_smoke.pdf", p_stack_smoke, width = 12, height = 8)
+# ggsave("stack_smoke.png", p_stack_smoke, width = 12, height = 8, dpi = 1000)
+
+```
+
+# 6. Creating EQ VAS Plots
+
+The EQ VAS score allows for creating a variety of plots, depending on interest.
+Here, the script will showcase how to look at distirbutions across different groups (histograms, densityplots, boxplots, ridgline plot), and how to examine linear (and curvelinear) relationships between variables of interest and EQ VAS
+
+
+## EQ VAS Histogram (No Group)
+
+This histogram shows the overall distribution of EQ VAS scores.
+
+How this works:
+
+- `aes(x = EQ_VAS)` maps the VAS scores to the x-axis.
+- `geom_histogram(binwidth = 5)`groups data into bins of width 5; adjust binwidth to refine granularity.
+- `fill = "grey"` sets the colour of the bars, whereas  `colour = "white` colours the gaps between. Set the colour you like. 
+
+```{r, fig.width=10, fig.height=8}
+
+p_vas_hist <- ggplot(df, aes(x = EQ_VAS)) +
+  geom_histogram(binwidth = 5, fill = "grey", colour = "white") +
+  labs(title = "EQ VAS Histogram",
+       x = "EQ VAS Score",
+       y = "Count") +
+  theme_nice()
+
+p_vas_hist
+# ggsave("vas_hist.pdf", p_vas_hist, width = 8, height = 5)
+# ggsave("vas_hist.png", p_vas_hist, width = 8, height = 5, dpi = 1000)
+
+
+```
+
+
+## EQ VAS Histogram by Education
+
+Compare the VAS distribution across education levels with side-by-side bars.
+
+How this works: 
+
+- `fill = education` assigns each level a color.
+- `position = "dodge"` arranges bars side-by-side.
+- The Chicago palette is applied via `scale_fill_uchicago()`.
+
+```{r, fig.width=10, fig.height=8}
+p_vas_hist_ed <- ggplot(df, aes(x = EQ_VAS, fill = education)) +
+  geom_histogram(position = "dodge", binwidth = 5, colour = "white") +
+  scale_fill_uchicago() +
+  labs(title = "EQ VAS Histogram by Education",
+       x = "EQ VAS",
+       y = "Count",
+       fill = "Education") +
+  theme_nice()
+
+p_vas_hist_ed
+# ggsave("vas_hist_ed.pdf", p_vas_hist_ed, width = 8, height = 5)
+# ggsave("vas_hist_ed.png", p_vas_hist_ed, width = 8, height = 5, dpi = 1000)
+
+```
+
+## EQ VAS Density by Education
+
+Overlay density curves for each education level, with group-specific mean lines.
+How this works: 
+
+- `geom_density()` sets the plot to a density plot, and requires only an x variable specified. 
+- Mapping `fill` and `colour` to `education` draws separate density curves by levels of education.
+- Transparency (`alpha`) helps visualize overlaps.
+- Mean lines added with `geom_vline()` highlight group means
+
+```{r, fig.width=12, fig.height=8}
+
+p_vas_den_ed <- ggplot(df, aes(x = EQ_VAS, fill = education, colour = education)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_uchicago() +
+  scale_colour_uchicago() +
+  labs(title = "EQ VAS Density by Education",
+       x = "EQ VAS",
+       y = "Density") +
+  theme_nice()
+
+# Add group-specific mean lines
+group_vas_means <- df %>%
+  group_by(education) %>%
+  summarise(mean_vas = mean(EQ_VAS, na.rm = TRUE), .groups = "drop")
+
+p_vas_den_ed <- p_vas_den_ed +
+  geom_vline(data = group_vas_means,
+             aes(xintercept = mean_vas, colour = education),
+             linetype = "dashed", linewidth = 0.5)
+
+p_vas_den_ed
+# ggsave("vas_den_ed.pdf", p_vas_den_ed, width = 8, height = 5)
+# ggsave("vas_den_ed.png", p_vas_den_ed, width = 8, height = 5, dpi = 1000)
+
+
+```
+
+
+
+## EQ VAS Boxplot by Hospital
+
+Boxplots are especially handy when you need to compare many groups at once—they show medians, IQRs, and outliers compactly.
+
+How this works:
+
+- `aes(x = EQ_VAS, y = hospital)` rotates the usual orientation so hospitals run vertically.
+- Boxes span the 25th–75th percentiles; whiskers indicate variability, and points beyond are outliers.
+- `coord_cartesian(xlim = c(0,100))` forces the  x-axis to span the entire theoretical range of the EQVAS score.
+
+```{r, fig.width=12, fig.height=8}
+
+p_vas_box <- ggplot(df, aes(x = EQ_VAS, y = hospital)) +
+  geom_boxplot(colour = "black", fill = "#6495ED") +
+  coord_cartesian(xlim = c(0,100)) +
+  labs(title = "EQ VAS Boxplot by Hospital",
+       x = "EQ VAS Score",
+       y = "Hospital") +
+  theme_nice()
+
+p_vas_box
+# ggsave("vas_box.pdf", p_vas_box, width = 10, height = 6)
+# ggsave("vas_box.png", p_vas_box, width = 10, height = 6, dpi = 1000)
+
+```
+
+
+
+## EQ VAS Ridgeline by Hospital
+
+Ridgeline plots overlay multiple density estimates, making it easy to compare distribution shapes across many groups.
+
+How this works: 
+
+- `aes(y = hospital)` creates a separate density for each hospital.
+- `fill = after_stat(x)` applies a gradient based on the x-value (VAS score).
+- `rel_min_height` and `scale` control overlap and vertical spacing.
+- `scale_fill_viridis_c(option = "viridis")` creates a nice colour gradient (enter `?scale_fill_viridis` in console to learn more)
+
+
+```{r, fig.width=12, fig.height=8}
+p_vas_ridge <- ggplot(df, aes(x = EQ_VAS, y = hospital, fill = after_stat(x))) +
+  geom_density_ridges_gradient(scale = 1, rel_min_height = 0.01) +
+  scale_fill_viridis_c(option = "viridis", name = "EQ VAS") +
+  labs(title = "EQ VAS Ridgeline by Hospital",
+       x = "EQ VAS Score",
+       y = "Hospital") +
+  theme_nice()
+
+p_vas_ridge
+# ggsave("vas_ridge.pdf", p_vas_ridge, width = 10, height = 8)
+# ggsave("vas_ridge.png", p_vas_ridge, width = 10, height = 8, dpi = 1000)
+
+```
+
+
+## EQ VAS Trend Plots
+
+We now examine trends over time using both linear and smooth fits.
+
+Observed Mean EQ VAS by Year & Gender
+
+Plot the annual mean VAS for each gender with lines and points.
+
+How this works:
+
+- `stat_summary(fun = mean, geom = "line")` connects yearly means.
+- `stat_summary(fun = mean, geom = "point")` overlays mean points.
+- `Color` and `fill` mapping to gender differentiates the series.
+
+
+```{r, fig.width=14, fig.height=8}
+
+p_trend_obs <- ggplot(df, aes(x = year, y = EQ_VAS, colour = gender, fill = gender)) +
+  stat_summary(fun = mean, geom = "line", linewidth = 1) +
+  stat_summary(fun = mean, geom = "point", shape = 21, size = 5) +
+  scale_fill_uchicago() +
+  scale_colour_uchicago() +
+  labs(title = "Observed Mean EQ VAS by Year & Gender",
+       x = "Year",
+       y = "Mean EQ VAS") +
+  theme_nice()
+
+p_trend_obs
+# ggsave("trend_obs.pdf", p_trend_obs, width = 10, height = 5)
+# ggsave("trend_obs.png", p_trend_obs, width = 10, height = 5, dpi = 1000)
+
+```
+
+##  Linear Trend (LM) EQ VAS by Gender
+
+Add linear regression lines and confidence bands; you can swap or customize the smoother.
+
+How this works & Tweaks:
+
+- `method = "lm" `fits OLS regression lines; use method = "loess" for local smoothing.
+- To fit polynomials, add `formula = y ~ poly(x, 2) `or `poly(x,3)` etc.  inside geom_smooth().
+- Set `se = FALSE` to hide confidence intervals.
+
+
+```{r, fig.width=14, fig.height=8}
+p_trend_lm <- ggplot(df, aes(x = year, y = EQ_VAS, colour = gender, fill = gender)) +
+  geom_smooth(method = "lm", se = TRUE) +
+  scale_fill_uchicago() +
+  scale_colour_uchicago() +
+  labs(title = "Linear Trend EQ VAS by Gender",
+       x = "Year",
+       y = "EQ VAS") +
+  theme_nice()
+
+p_trend_lm
+# ggsave("trend_lm.pdf", p_trend_lm, width = 10, height = 5)
+# ggsave("trend_lm.png", p_trend_lm, width = 10, height = 5, dpi = 1000)
+
+```
+
+
+## LOESS Trend EQ VAS by Gender
+
+Capture non-linear patterns over time with LOESS smoothing; adjust span to control wiggliness.
+
+How this works & tweaks:
+
+- span controls the degree of smoothing: smaller = more sensitive, larger = smoother.
+- For large datasets, LOESS may switch internally to GAM—explicitly forcing LOESS ensures consistency.
+
+```{r, fig.width=14, fig.height=8}
+p_trend_loess <- ggplot(df, aes(x = year, y = EQ_VAS, colour = gender, fill = gender)) +
+  geom_smooth(method = "loess", se = TRUE, span = 0.75) +
+  scale_fill_uchicago() +
+  scale_colour_uchicago() +
+  labs(title = "LOESS Trend EQ VAS by Gender",
+       x = "Year",
+       y = "EQ VAS") +
+  coord_cartesian(ylim = c(0,100)) +
+  theme_nice()
+
+p_trend_loess
+# ggsave("trend_loess.pdf", p_trend_loess, width = 10, height = 5)
+# ggsave("trend_loess.png", p_trend_loess, width = 10, height = 5, dpi = 1000)
+
+```
+
+
+## LOESS Trend of EQ VAS by Education & Age
+
+Facet the LOESS trend by age group and color by education level.
+How this works:
+
+- `facet_wrap(~ age)` splits panels by age group.
+- `Color` and `fill` mapped to education differentiate trend lines within each pane
+
+```{r, fig.width=14, fig.height=8}
+p_trend_loess_age <- ggplot(df, aes(x = year, y = EQ_VAS, colour = education, fill = education)) +
+  geom_smooth(method = "loess", se = TRUE, alpha = 0.2) +
+  facet_wrap(~ age) +
+  coord_cartesian(ylim = c(0,100)) +
+  scale_fill_uchicago() +
+  scale_colour_uchicago() +
+  labs(title = "LOESS Trend of EQ VAS by Education & Age",
+       x = "Year",
+       y = "EQ VAS") +
+  theme_nice()
+
+p_trend_loess_age
+# ggsave("trend_loess_age.pdf", p_trend_loess_age, width = 12, height = 8)
+# ggsave("trend_loess_age.png", p_trend_loess_age, width = 12, height = 8, dpi = 1000)
+
+```
+
+
+# Tips & Tweaks
+
+- Aesthetic mappings `(aes())`: map variables to `x`, `y`, `fill`,  and `colour`. 
+- Data prep: use `group_by()`, `summarise()`, and `mutate()` to compute counts, proportions, or means before plotting.
+- Bar charts: switch `stat="identity"` ↔ `stat="count"`, adjust position (`"dodge"`, `"stack"`, `"fill"`), or recode factors for order.
+- Histograms: tweak `binwidth`, `breaks`, or `boundary` to refine. Use `position="fill"` for relative frequencies.
+- Density plots: control bandwidth via `bw`, set `alpha` for transparency. 
+- Smoothers: in `geom_smooth()`, change method (e.g., `"lm"`, `"loess"`, `"gam"`), tweak span, or supply formula for polynomial fits.
+- Faceting: use `facet_wrap(~ variable)` or `facet_grid(rows ~ cols)` for multi-panel layouts.
+- Color palettes: experiment with palettes such as `scale_fill_brewer()`, `scale_fill_viridis_d(`), or `scale_fill_uchicago()`, or define custom palettes with `scale_fill_manual()`.
+- Saving: uncomment `ggsave()` calls to export figures; adjust width, height, and dpi to match your publication requirements.
+

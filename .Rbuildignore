@@ -2,5 +2,7 @@
 ^\.Rproj\.user$
 ^CITATION\.cff$
 ^LICENSE\.md$
+^docs$
+^user_manual$
 ^app\.R$
 ^\.github$
