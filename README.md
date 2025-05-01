@@ -41,7 +41,7 @@ install.packages("remotes")
 remotes::install_github("SondreNilsen/Shiny.EQ5D")
 ```
 
-### 🔒 Installing on Offline or Closed Servers
+### Installing on Offline or Closed Servers
 
 If you're working on a server without access to GitHub (but with access to CRAN), you can still install the package from a `.tar.gz` source file.
 
