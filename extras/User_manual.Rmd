@@ -1,9 +1,9 @@
 ---
-title: "EQ5D Datavisualizations"
+title: "EQ5D Data visualizations"
 author: "Sondre Nilsen"
 date: "2025-03-24"
 output:
-  rmdformats::material:
+  rmdformats::readthedown:
     cards: T
     code_folding: hide
 editor_options: 
