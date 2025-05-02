@@ -203,7 +203,7 @@ If you prefer working directly in R, you can use a standalone script to create m
 [`EQ5D_script.R`](https://github.com/SondreNilsen/Shiny.EQ5D/blob/main/extras/EQ5D_script.R)
 
 📖 **View the interactive user manual:**  
-📄 [EQ-5D user manual](https://sondrenilsen.github.io/Shiny.EQ5D/EQ5D_user_manual.html)
+📄 [EQ-5D user manual](https://sondrenilsen.github.io/Shiny.EQ5D/blob/main/docs/EQ5D_user_manual.html)
 
 
 ------------------------------------------------------------------------
